@@ -39,35 +39,24 @@ if ( $buddy_boss_exists && $gamipress_exists ) {
 	// Includes.
 	require 'includes/activation.php';
 	require 'process/topic-points-awarded.php';
+	require 'process/tba-save-reply-meta.php';
+	require 'shortcodes/display-like-button.php';
+	require 'includes/enqueue.php';
+	require 'frontend/forum-reply.php';
+	require 'process/tba-like-reply.php';
+
 	// Hooks.
 	register_activation_hook( __FILE__, 'tba_plugin_activate' );
 	add_action( 'save_post_topic', 'tba_topic_points_awarded', 10, 3 );
+	add_action( 'user_register', 'tba_add_user_meta', 10, 1 );
+	add_action( 'save_post_reply', 'tba_save_reply_meta', 10, 3 );
+	add_action( 'wp_enqueue_scripts', 'tba_enqueue' );
+	add_action( 'bbp_theme_after_reply_content', 'tba_add_like_button' );
+	add_action( 'wp_ajax_tba_like_reply', 'tba_like_reply' );
+	add_action( 'tba_run_weekly_jobs', 'tba_run_weekly_jobs' );
 
 	// ShortCodes.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	add_shortcode( 'display_like_button', 'display_like_button' );
 
 
 
