@@ -26,12 +26,16 @@ if ( ! function_exists( 'add_action' ) ) {
 /**
  *  Check if BuddyBoss and Gamipress are active
  */
-$buddy_boss_exists = in_array( 'buddyboss-platform/bp-loader.php', get_option( 'active_plugins' ), true );
-$gamipress_exists  = in_array( 'gamipress/gamipress.php', get_option( 'active_plugins' ), true );
+
+$active_plugins = get_option( 'active_plugins' );
+
+$buddy_boss_exists               = in_array( 'buddyboss-platform/bp-loader.php', $active_plugins, true );
+$gamipress_exists                = in_array( 'gamipress/gamipress.php', $active_plugins, true );
+$gamipress_bb_integration_exists = in_array( 'gamipress-buddyboss-integration/gamipress-buddyboss.php', $active_plugins, true );
 
 require 'utilities/gamipress-buddyboss-not-activated.php';
 
-if ( $buddy_boss_exists && $gamipress_exists ) {
+if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists ) {
 
 	// Setup.
 	DEFINE( 'TBA_PATH', __FILE__ );
@@ -44,6 +48,12 @@ if ( $buddy_boss_exists && $gamipress_exists ) {
 	require 'includes/enqueue.php';
 	require 'frontend/forum-reply.php';
 	require 'process/tba-like-reply.php';
+	require 'utilities/tba-add-post-meta.php';
+	require 'utilities/add-badges-and-ranks.php';
+	require 'wp-cron-jobs/tba-run-weekly-jobs.php';
+	require 'wp-cron-jobs/tba-run-hourly-jobs.php';
+	require 'admin/columns.php';
+	require 'shortcodes/display-leaderboards.php';
 
 	// Hooks.
 	register_activation_hook( __FILE__, 'tba_plugin_activate' );
@@ -54,11 +64,18 @@ if ( $buddy_boss_exists && $gamipress_exists ) {
 	add_action( 'bbp_theme_after_reply_content', 'tba_add_like_button' );
 	add_action( 'wp_ajax_tba_like_reply', 'tba_like_reply' );
 	add_action( 'tba_run_weekly_jobs', 'tba_run_weekly_jobs' );
-
+	add_action( 'tba_run_hourly_jobs', 'tba_run_hourly_jobs' );
+	add_filter( 'manage_users_columns', 'tba_add_points_column' );
+	add_filter( 'manage_users_custom_column', 'tba_add_points_column_data', 10, 3 );
+	add_filter(
+		'wp_mail_content_type',
+		function( $content_type ) {
+			return 'text/html';
+		}
+	);
 	// ShortCodes.
-	add_shortcode( 'display_like_button', 'display_like_button' );
-
-
+		add_shortcode( 'display_like_button', 'display_like_button' );
+		add_shortcode( 'display_leaderboards', 'display_leaderboards' );
 
 } else {
 

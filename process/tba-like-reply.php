@@ -34,6 +34,10 @@ function tba_like_reply() {
 
 	$tba_liker = get_user_meta( $replying_user_id, 'tba_points_info' );
 
+	if ( $comment_author == $replying_user_id ) {
+		wp_send_json( $output );
+	}
+
 	if ( $tba_liker[0]['available_likes'] < 1 ) {
 		wp_send_json( $output );
 	}
@@ -46,12 +50,16 @@ function tba_like_reply() {
 
 	}
 
+	$total_people_liked_initially = count( $tba_like_reply[0]['people_liked'] );
+
 	if ( in_array( $replying_user_id, $tba_like_reply[0]['people_liked'], true ) ) {
 		$key = array_search( $replying_user_id, $tba_like_reply[0]['people_liked'], true );
 		unset( $tba_like_reply[0]['people_liked'][ $key ] );
 		$first_like  = -$first_like;
 		$other_like  = -$other_like;
 		$like_change = -$like_change;
+
+		$like_reply_check = 0;
 
 		$user_liked = false;
 
@@ -61,10 +69,11 @@ function tba_like_reply() {
 		$first_like                          = 5;
 		$other_like                          = 1;
 		$like_change                         = 1;
+		$like_reply_check                    = 1;
 
 	}
 
-	if ( count( $tba_like_reply[0]['people_liked'] ) == 1 ) {
+	if ( count( $tba_like_reply[0]['people_liked'] ) <= $like_reply_check ) {
 
 		$tba_points_info_new = array(
 			'points'              => intval( $tba_points_info[0]['points'] ) + $first_like,
@@ -72,6 +81,7 @@ function tba_like_reply() {
 				$tba_points_info[0]['last_question_asked'],
 			),
 			'available_likes'     => intval( $tba_points_info[0]['available_likes'] ),
+			'gifts_recieved'      => intval( $tba_points_info[0]['gifts_recieved'] ),
 		);
 	} else {
 
@@ -81,12 +91,11 @@ function tba_like_reply() {
 				$tba_points_info[0]['last_question_asked'],
 			),
 			'available_likes'     => intval( $tba_points_info[0]['available_likes'] ),
+			'gifts_recieved'      => intval( $tba_points_info[0]['gifts_recieved'] ),
 		);
 	}
 
 	update_user_meta( $comment_author, 'tba_points_info', $tba_points_info_new );
-
-	// $tba_like_reply[0]['people_liked'][] = $replying_user_id.;
 
 	$total_likes = count( $tba_like_reply[0]['people_liked'] );
 
@@ -105,6 +114,8 @@ function tba_like_reply() {
 			$tba_liker[0]['last_question_asked'],
 		),
 		'available_likes'     => intval( $tba_liker[0]['available_likes'] ) - $like_change,
+		'gifts_recieved'      => intval( $tba_liker[0]['gifts_recieved'] ),
+
 	);
 
 	update_user_meta( $replying_user_id, 'tba_points_info', $tba_liker_new );

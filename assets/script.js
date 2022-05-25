@@ -10,18 +10,21 @@
         }
 
         var like_review = $(this);
-
+        var total_likes = like_review.siblings('.tba_total_likes');
         $.post(tba.ajax_url, data,
             function (data) {
                 if(data['user_liked'] === true)
                 {
-                    console.log(like_review);
+                    console.log(like_review.siblings('.tba_total_likes'));
                    like_review[0].innerHTML ='<i class="fa fa-thumbs-up" aria-hidden="true"></i>You liked this ';
+                   total_likes[0].innerHTML = data['total_likes'];
                 }
                 else
                 {
-                    console.log(like_review);
+                    console.log(like_review.siblings('.tba_total_likes'));
                     like_review[0].innerHTML = '<i class="fa fa-thumbs-up" aria-hidden="true"></i> Like';
+
+                    total_likes[0].innerHTML = data['total_likes'];
                 }
 
 

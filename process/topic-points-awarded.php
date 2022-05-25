@@ -23,6 +23,7 @@ function tba_topic_points_awarded( $post_id, $post, $update ) {
 				'points'              => intval( $tba_points_info[0]['points'] ) + 5,
 				'last_question_asked' => intval( $tba_points_info[0]['last_question_asked'] ),
 				'available_likes'     => intval( $tba_points_info[0]['available_likes'] ),
+				'gifts_recieved'      => intval( $tba_points_info[0]['gifts_recieved'] ),
 			);
 
 			$user_meta = update_user_meta( $author_id, 'tba_points_info', $tba_points_info_new );
