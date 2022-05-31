@@ -71,9 +71,3 @@ gamipress_award_achievement_to_user( $achievement->ID, $user_id )
 
 5. Leaderboards:- We will run a loop on each user to grab the number of points they have and add it to an array which will be stored at wp_options table. We will use that option to retrieve leaderboard values and display them through a shortcode. 
 
-
-== Installation ==
-Just hit the install button and use these shortcodes to display different forms. 
-1. display_vendor_form:- For displaying Vendor Form
-2. display_product_form:- For displaying Product Form
-3. display_search_form:- For displaying Search Form
