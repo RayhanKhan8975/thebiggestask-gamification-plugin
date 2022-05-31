@@ -10,7 +10,6 @@ function tba_plugin_activate() {
 
 	$wp_user_query = 'SELECT * FROM ' . $wpdb->prefix . 'users';
 
-	set_options();
 
 	// Get the results
 	$users = $wpdb->get_results( $wp_user_query );

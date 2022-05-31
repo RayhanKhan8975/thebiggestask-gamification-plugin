@@ -1,11 +1,9 @@
-=== Directory for I Love Grampas ===
-Tags: Vendor, Products, Searches, etc
+=== Gamification Plugin for The Biggest Ask ===
 Requires at least: 5.2
 Requires PHP: 7.2
 License: GPL V2
 
-The Plugins help in building a directory of Vendors and products and also provides searching for different products and Vendors. 
-
+The Plugin creates a Gamification system so users can stay on the site.
 == Description ==
 The Plugin fulfills these requirements of the gamification system:-
 

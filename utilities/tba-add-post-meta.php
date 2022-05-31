@@ -17,7 +17,6 @@ function tba_add_post_meta( $post_id ) {
 		update_post_meta( $post_id, '_gamipress_maximum_earners', '0' );
 		update_post_meta( $post_id, '_gamipress_layout', 'left' );
 		update_post_meta( $post_id, '_gamipress_align', 'none' );
-
 		if ( 'tba-ranks' !== $post->post_type ) {
 
 			update_post_meta( $post_id, '_gamipress_points_type_required', '' );
