@@ -5,9 +5,12 @@
  * @return void
  */
 function tba_plugin_activate() {
-	$wp_user_query = 'SELECT * FROM wp_users';
 
 	global $wpdb;
+
+	$wp_user_query = 'SELECT * FROM ' . $wpdb->prefix . 'users';
+
+	set_options();
 
 	// Get the results
 	$users = $wpdb->get_results( $wp_user_query );
@@ -16,7 +19,8 @@ function tba_plugin_activate() {
 
 		// loop trough each author
 		foreach ( $users as $user ) {
-			if ( array() === get_user_meta( $user->ID, 'tba_points_info' ) ) {
+			$user_meta = get_user_meta( $user->ID, 'tba_points_info' );
+			if ( empty( $user_meta ) ) {
 
 				$tba_points_info = array(
 					'points'              => 0,

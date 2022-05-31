@@ -5,9 +5,9 @@
  * @return void
  */
 function tba_run_hourly_jobs() {
-	$wp_user_query = 'SELECT * FROM wp_users';
-
 	global $wpdb;
+
+	$wp_user_query = 'SELECT * FROM ' . $wpdb->prefix . 'users';
 
 	// Get the results.
 	$users = $wpdb->get_results( $wp_user_query );
@@ -24,23 +24,31 @@ function tba_run_hourly_jobs() {
 
 		$leaderboards = array();
 
+		$es_points = get_option( 'tba_es_questions' );
+
+		$ip_points = get_option( 'tba_eip_questions' );
+
+		$cs_points = get_option( 'tba_cs_questions' );
+
+		$vc_points = get_option( 'tba_vc_likes' );
+
 		// loop trough each user.
 		foreach ( $users as $user ) {
 			$tba_points_info = get_user_meta( $user->ID, 'tba_points_info', true );
 
 			$roles = get_user_meta( $user->ID, 'wp_capabilities', true );
 
-			if ( ( isset( $roles['surrogate'] ) && true === $roles['surrogate'] ) && count_user_posts( $user->ID, 'reply', true ) >= 25 && ! gamipress_has_user_earned_rank( $surrogate->ID, $user->ID ) ) {
+			if ( ( isset( $roles['surrogate'] ) && true === $roles['surrogate'] ) && count_user_posts( $user->ID, 'reply', true ) >= $es_points && ! gamipress_has_user_earned_rank( $surrogate->ID, $user->ID ) ) {
 
 				gamipress_award_rank_to_user( $surrogate->ID, $user->ID );
 			}
 
-			if ( ( isset( $roles['intended-parent'] ) && true === $roles['intended-parent'] ) && count_user_posts( $user->ID, 'reply', true ) >= 25 && ! gamipress_has_user_earned_rank( $intended_parent->ID, $user->ID ) ) {
+			if ( ( isset( $roles['intended-parent'] ) && true === $roles['intended-parent'] ) && count_user_posts( $user->ID, 'reply', true ) >= $ip_points && ! gamipress_has_user_earned_rank( $intended_parent->ID, $user->ID ) ) {
 
 				gamipress_award_rank_to_user( $intended_parent->ID, $user->ID );
 			}
 
-			if ( count_user_posts( $user->ID, 'topic', true ) >= 5 && ! gamipress_has_user_earned_achievement( $conversation_starter->ID, $user->ID ) ) {
+			if ( count_user_posts( $user->ID, 'topic', true ) >= $cs_points && ! gamipress_has_user_earned_achievement( $conversation_starter->ID, $user->ID ) ) {
 				gamipress_award_achievement_to_user( $conversation_starter->ID, $user->ID );
 			}
 
@@ -59,7 +67,7 @@ function tba_run_hourly_jobs() {
 				foreach ( $latest_10_replies as $reply ) {
 					$reply_meta = get_post_meta( $reply->ID, 'tba_reply_meta' );
 
-					if ( isset( $reply_meta[0]['total_likes'] ) && $reply_meta[0]['total_likes'] > 4 ) {
+					if ( isset( $reply_meta[0]['total_likes'] ) && $reply_meta[0]['total_likes'] > $vc_points ) {
 						gamipress_award_achievement_to_user( $valued_contributor->ID, $user->ID );
 						break;
 					}
@@ -77,7 +85,7 @@ function tba_run_hourly_jobs() {
 			$main_leaderboards = array();
 			foreach ( $leaderboards as $user => $points ) {
 				++$count;
-				$main_leaderboards[] = array(
+				$main_leaderboards[ $user ] = array(
 					'rank'   => $count,
 					'avatar' => $avatars[ $user ],
 					'Name'   => $user_id_and_name[ $user ],

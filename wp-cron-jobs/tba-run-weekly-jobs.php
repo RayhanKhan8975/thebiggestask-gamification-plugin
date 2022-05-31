@@ -5,12 +5,14 @@
  * @return void
  */
 function tba_run_weekly_jobs() {
-
-	$wp_user_query = 'SELECT * FROM wp_users';
-
 	global $wpdb;
 
+	$wp_user_query = 'SELECT * FROM ' . $wpdb->prefix . 'users';
+
 	$weekly_winners = array();
+
+	$likes_awarded_every_week = get_option( 'tba_likes_every_week' );
+	$points_for_giftcard      = get_option( 'tba_points_for_giftcard' );
 
 	// Get the results
 	$users = $wpdb->get_results( $wp_user_query );
@@ -25,12 +27,12 @@ function tba_run_weekly_jobs() {
 				$tba_points_info_new = array(
 					'points'              => intval( $tba_points_info[0]['points'] ),
 					'last_question_asked' => intval( $tba_points_info[0]['last_question_asked'] ),
-					'available_likes'     => 5,
+					'available_likes'     => $likes_awarded_every_week,
 					'gifts_recieved'      => intval( $tba_points_info[0]['gifts_recieved'] ),
 				);
 				$points              = intval( $tba_points_info_new['points'] );
 				$gifts_recieved      = intval( $tba_points_info_new['gifts_recieved'] );
-				if ( ( $tba_points_info_new['points'] < 200 && $tba_points_info_new['gifts_recieved'] === 0 && $tba_points_info_new['points'] > 100 ) || ( $points / ( $gifts_recieved + 1 ) > 100 ) ) {
+				if ( ( $tba_points_info_new['points'] < 2 * ( $points_for_giftcard ) && $tba_points_info_new['gifts_recieved'] === 0 && $tba_points_info_new['points'] > $points_for_giftcard ) || ( $points / ( $gifts_recieved + 1 ) >= $points_for_giftcard ) ) {
 
 					$weekly_winners[]                       = array(
 						'user_name' => $user->display_name,

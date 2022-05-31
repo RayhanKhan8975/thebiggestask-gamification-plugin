@@ -64,10 +64,10 @@ function add_badges_and_ranks() {
 
 		if ( ! is_wp_error( $self_earned_post_result ) ) {
 
-			$self_earned_post_id = get_post( $self_earned_post_result );
+			// $self_earned_post_id = get_post( $self_earned_post_result );
 
-			update_post_meta( $self_earned_post_id, '_gamipress_plural_name', 'Self Earned' );
-			update_post_meta( $self_earned_post_id, '_gamipress_bp_create_achievement_activity', 'on' );
+			update_post_meta( $self_earned_post_result, '_gamipress_plural_name', 'Self Earned' );
+			update_post_meta( $self_earned_post_result, '_gamipress_bp_create_achievement_activity', 'on' );
 			$convo_starter_post        = array(
 				'post_title'   => 'Conversation starter',
 				'post_content' => '',
@@ -110,10 +110,10 @@ function add_badges_and_ranks() {
 
 		if ( ! is_wp_error( $tba_ranks_post_result ) ) {
 
-			$tba_ranks_post_id = get_post( $tba_ranks_post_result );
+			// $tba_ranks_post_id = get_post( $tba_ranks_post_result );
 
-			update_post_meta( $tba_ranks_post_id, '_gamipress_plural_name', 'TBA Ranks' );
-			update_post_meta( $tba_ranks_post_id, '_gamipress_bp_create_achievement_activity', 'on' );
+			update_post_meta( $tba_ranks_post_result, '_gamipress_plural_name', 'TBA Ranks' );
+			update_post_meta( $tba_ranks_post_result, '_gamipress_bp_create_achievement_activity', 'on' );
 			$exp_surrogate_post        = array(
 				'post_title'   => 'Experienced Surrogate',
 				'post_content' => '',
@@ -121,6 +121,7 @@ function add_badges_and_ranks() {
 				'post_author'  => get_current_user_id(),
 				'post_name'    => 'experienced-surrogate',
 				'post_type'    => 'tba-ranks',
+				'menu_order'   => 100,
 			);
 			$exp_surrogate_post_result = wp_insert_post( $exp_surrogate_post, true );
 
@@ -133,11 +134,26 @@ function add_badges_and_ranks() {
 				'post_author'  => get_current_user_id(),
 				'post_name'    => 'experienced-intended-parent',
 				'post_type'    => 'tba-ranks',
+				'menu_order'   => 100,
 			);
 
 			$exp_intended_parent_post_result = wp_insert_post( $exp_intended_parent_post, true );
 
 			tba_add_post_meta( $exp_intended_parent_post_result );
+
+			$new_member_post = array(
+				'post_title'   => 'New Member',
+				'post_content' => '',
+				'post_status'  => 'publish',
+				'post_author'  => get_current_user_id(),
+				'post_name'    => 'new-member',
+				'post_type'    => 'tba-ranks',
+				'menu_order'   => 0,
+			);
+
+			$new_member_post_result = wp_insert_post( $new_member_post, true );
+
+			tba_add_post_meta( $new_member_post_result );
 
 		}
 	}

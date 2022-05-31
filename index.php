@@ -50,19 +50,28 @@ if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists
 	require 'process/tba-like-reply.php';
 	require 'utilities/tba-add-post-meta.php';
 	require 'utilities/add-badges-and-ranks.php';
-	require 'wp-cron-jobs/tba-run-weekly-jobs.php';
 	require 'wp-cron-jobs/tba-run-hourly-jobs.php';
+	require 'wp-cron-jobs/tba-run-weekly-jobs.php';
 	require 'admin/columns.php';
 	require 'shortcodes/display-leaderboards.php';
+	require 'utilities/set-options.php';
+	require 'admin/register-tba-menu.php';
+	require 'admin/display-approve-topics.php';
+	require 'admin/display-tba-menu.php';
+	require 'process/tba-set-topics-for-approval.php';
+	require 'admin/tba-admin-enqueue.php';
+	require 'process/tba-approve-topic.php';
+	require 'process/send-tba-settings.php';
 
 	// Hooks.
 	register_activation_hook( __FILE__, 'tba_plugin_activate' );
-	add_action( 'save_post_topic', 'tba_topic_points_awarded', 10, 3 );
+	add_action( 'save_post_topic', 'tba_set_topics_for_approval', 10, 3 );
 	add_action( 'user_register', 'tba_add_user_meta', 10, 1 );
 	add_action( 'save_post_reply', 'tba_save_reply_meta', 10, 3 );
 	add_action( 'wp_enqueue_scripts', 'tba_enqueue' );
 	add_action( 'bbp_theme_after_reply_content', 'tba_add_like_button' );
 	add_action( 'wp_ajax_tba_like_reply', 'tba_like_reply' );
+	add_action( 'wp_ajax_send_tba_settings', 'send_tba_settings' );
 	add_action( 'tba_run_weekly_jobs', 'tba_run_weekly_jobs' );
 	add_action( 'tba_run_hourly_jobs', 'tba_run_hourly_jobs' );
 	add_filter( 'manage_users_columns', 'tba_add_points_column' );
@@ -73,6 +82,9 @@ if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists
 			return 'text/html';
 		}
 	);
+	add_action( 'admin_menu', 'register_tba_menu' );
+	add_action( 'admin_enqueue_scripts', 'tba_admin_enqueue' );
+	add_action( 'wp_ajax_tba_approve_topic', 'tba_approve_topic' );
 	// ShortCodes.
 		add_shortcode( 'display_like_button', 'display_like_button' );
 		add_shortcode( 'display_leaderboards', 'display_leaderboards' );
@@ -81,7 +93,3 @@ if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists
 
 	add_action( 'admin_notices', 'gamipress_buddyboss_not_activated' );
 }
-
-
-
-

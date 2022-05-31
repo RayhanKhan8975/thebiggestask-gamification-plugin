@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Enqueues Necessary Scripts and Styles to Front End.
  *
  * @return void
  */

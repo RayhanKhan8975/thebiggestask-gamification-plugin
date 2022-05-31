@@ -26,9 +26,9 @@ function tba_like_reply() {
 
 	$tba_points_info = get_user_meta( $comment_author, 'tba_points_info' );
 
-	$first_like = 5;
+	$first_like = get_option( 'tba_answer_question_like' );
 
-	$other_like = 1;
+	$other_like = get_option( 'tba_answer_question_like_additonal' );
 
 	$like_change = 1;
 
@@ -66,10 +66,10 @@ function tba_like_reply() {
 	} else {
 		$tba_like_reply[0]['people_liked'][] = $replying_user_id;
 		$user_liked                          = true;
-		$first_like                          = 5;
-		$other_like                          = 1;
-		$like_change                         = 1;
-		$like_reply_check                    = 1;
+		// $first_like                          = 5;
+		// $other_like                          = 1;
+		$like_change      = 1;
+		$like_reply_check = 1;
 
 	}
 
