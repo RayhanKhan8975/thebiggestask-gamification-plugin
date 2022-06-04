@@ -36,7 +36,7 @@ function display_leaderboards() {
   </tr>';
 			$count++;
 
-			if ( $count === 10 ) {
+			if ( $count === 5 ) {
 				break;
 			}
 		}

@@ -10,7 +10,6 @@ function tba_plugin_activate() {
 
 	$wp_user_query = 'SELECT * FROM ' . $wpdb->prefix . 'users';
 
-
 	// Get the results
 	$users = $wpdb->get_results( $wp_user_query );
 	// Check for results
@@ -48,6 +47,8 @@ function tba_plugin_activate() {
 	}
 
 	// Setting up the achievements and ranks for the plugin.
+
+	set_options();
 
 	add_badges_and_ranks();
 

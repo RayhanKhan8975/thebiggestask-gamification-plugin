@@ -5,13 +5,15 @@
  * @return void
  */
 function display_like_button() {
-	// $reply = get_post( );
+	$reply = get_post( bbp_get_reply_id() );
 
 	$tba_like_reply = get_post_meta( bbp_get_reply_id(), 'tba_reply_meta' );
 
+	// var_dump( $reply->post_author, get_current_user_id(), get_the_author_meta( 'ID' ) );
+
 	$replying_user_id = get_current_user_id();
 
-	if ( $replying_user_id === get_the_author_meta( 'ID' ) ) {
+	if ( $replying_user_id == $reply->post_author ) {
 		return;
 	}
 

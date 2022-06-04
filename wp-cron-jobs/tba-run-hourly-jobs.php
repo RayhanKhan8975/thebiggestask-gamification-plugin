@@ -43,7 +43,7 @@ function tba_run_hourly_jobs() {
 				gamipress_award_rank_to_user( $surrogate->ID, $user->ID );
 			}
 
-			if ( ( isset( $roles['intended-parent'] ) && true === $roles['intended-parent'] ) && count_user_posts( $user->ID, 'reply', true ) >= $ip_points && ! gamipress_has_user_earned_rank( $intended_parent->ID, $user->ID ) ) {
+			if ( ( isset( $roles['intended_parent'] ) && true === $roles['intended_parent'] ) && count_user_posts( $user->ID, 'reply', true ) >= $ip_points && ! gamipress_has_user_earned_rank( $intended_parent->ID, $user->ID ) ) {
 
 				gamipress_award_rank_to_user( $intended_parent->ID, $user->ID );
 			}

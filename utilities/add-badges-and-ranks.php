@@ -21,8 +21,8 @@ function add_badges_and_ranks() {
 
 			$admin_awarded_post_id = get_post( $admin_awarded_post_result );
 
-			update_post_meta( $admin_awarded_post_id, '_gamipress_plural_name', 'Admin Awarded' );
-			update_post_meta( $admin_awarded_post_id, '_gamipress_bp_create_achievement_activity', 'on' );
+			update_post_meta( $admin_awarded_post_result, '_gamipress_plural_name', 'Admin Awarded' );
+			update_post_meta( $admin_awarded_post_result, '_gamipress_bp_create_achievement_activity', 'on' );
 			$team_leader_post        = array(
 				'post_title'   => 'Team Leader',
 				'post_content' => '',

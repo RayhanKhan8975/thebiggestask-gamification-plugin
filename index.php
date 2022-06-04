@@ -42,9 +42,9 @@ if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists
 
 	// Includes.
 	require 'includes/activation.php';
-	require 'process/topic-points-awarded.php';
 	require 'process/tba-save-reply-meta.php';
 	require 'shortcodes/display-like-button.php';
+	require 'process/tba-add-user-meta.php';
 	require 'includes/enqueue.php';
 	require 'frontend/forum-reply.php';
 	require 'process/tba-like-reply.php';
@@ -62,11 +62,12 @@ if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists
 	require 'admin/tba-admin-enqueue.php';
 	require 'process/tba-approve-topic.php';
 	require 'process/send-tba-settings.php';
+	require 'process/tba-redirect-user.php';
 
 	// Hooks.
 	register_activation_hook( __FILE__, 'tba_plugin_activate' );
 	add_action( 'save_post_topic', 'tba_set_topics_for_approval', 10, 3 );
-	add_action( 'user_register', 'tba_add_user_meta', 10, 1 );
+	add_action( 'user_register', 'tba_add_user_meta', 10, 2 );
 	add_action( 'save_post_reply', 'tba_save_reply_meta', 10, 3 );
 	add_action( 'wp_enqueue_scripts', 'tba_enqueue' );
 	add_action( 'bbp_theme_after_reply_content', 'tba_add_like_button' );
@@ -74,6 +75,7 @@ if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists
 	add_action( 'wp_ajax_send_tba_settings', 'send_tba_settings' );
 	add_action( 'tba_run_weekly_jobs', 'tba_run_weekly_jobs' );
 	add_action( 'tba_run_hourly_jobs', 'tba_run_hourly_jobs' );
+	// add_action( 'wp_login', 'tba_redirect_user', 10, 2 );
 	add_filter( 'manage_users_columns', 'tba_add_points_column' );
 	add_filter( 'manage_users_custom_column', 'tba_add_points_column_data', 10, 3 );
 	add_filter(
@@ -82,6 +84,7 @@ if ( $buddy_boss_exists && $gamipress_exists && $gamipress_bb_integration_exists
 			return 'text/html';
 		}
 	);
+	add_filter( 'login_redirect', 'tba_redirect_user', 10, 3 );
 	add_action( 'admin_menu', 'register_tba_menu' );
 	add_action( 'admin_enqueue_scripts', 'tba_admin_enqueue' );
 	add_action( 'wp_ajax_tba_approve_topic', 'tba_approve_topic' );
